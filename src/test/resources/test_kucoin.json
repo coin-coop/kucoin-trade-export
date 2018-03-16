@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "code": "OK",
+  "msg": "Operation succeeded.",
+  "timestamp": 1508306200007,
+  "data": {
+    "total": 1416,
+    "datas": [
+      {
+        "createdAt": 1508219588000,
+        "amount": 92.79323381,
+        "dealValue": 0.00927932,
+        "dealPrice": 0.0001,
+        "fee": 1e-8,
+        "feeRate": 0,
+        "oid": "59e59ac49bd8d31d09f85fa8",
+        "orderOid": "59e59ac39bd8d31d093d956a",
+        "coinType": "KCS",
+        "coinTypePair": "BTC",
+        "direction": "BUY",
+        "dealDirection": "BUY"
+      },
+      {
+        "createdAt": 1508219588000,
+        "amount": 92.79323381,
+        "dealValue": 0.00927932,
+        "dealPrice": 0.0001,
+        "fee": 1e-8,
+        "feeRate": 0,
+        "oid": "59e59ac49bd8d31d09f85fa7",
+        "orderOid": "59e41c949bd8d374c9956c74",
+        "coinType": "KCS",
+        "coinTypePair": "BTC",
+        "direction": "SELL",
+        "dealDirection": "BUY"
+      }
+    ],
+    "limit": 2,
+    "page": 1
+  }
+}
