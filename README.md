@@ -12,6 +12,7 @@ Use program on your own risk.
 
 ![GUI](docs/gui.png?raw=true "Application GUI")
 
+
 ### Donations
 
 If you find application helpful, feel free to send a coin.
