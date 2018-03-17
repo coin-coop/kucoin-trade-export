@@ -12,6 +12,13 @@ Use program on your own risk.
 
 ![GUI](docs/gui.png?raw=true "Application GUI")
 
+## Security
+
+After several complains by people about theoretical security issue, I advise that before you use application withdrawal your coins from KuCoin, next start application and download CSV trade history. After finishing remove API and Secret key which you have used for it.
+
+If you don't trust prebuilt exe application feel free to build it by yourself. Run maven build with goal package:
+
+´´´mvn clean package´´´
 
 ### Donations
 
