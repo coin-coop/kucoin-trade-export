@@ -31,6 +31,14 @@ public class KuCoinImporterJSON extends ImporterJSON {
         return getResults(jsonObjects, null);
     }
 
+    @Override
+    public List<Record> importChunks(String apiKey, String secretKey, String symbol, Long before, Long since) throws IOException {
+        KuCoinClient kuCoinClient = new KuCoinClient(apiKey, secretKey);
+
+        List<JsonObject> jsonObjects = kuCoinClient.getTradingHistory(symbol, before, since);
+        return getResults(jsonObjects, null);
+    }
+
     protected List<Record> getResults(List<JsonObject> jsonObjects, List<String> keys) {
         List<Record> recordsList = new ArrayList<>();
         for (JsonObject jsonObject : jsonObjects) {
