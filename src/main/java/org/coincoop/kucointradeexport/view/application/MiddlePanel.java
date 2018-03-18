@@ -4,12 +4,18 @@
 
 package org.coincoop.kucointradeexport.view.application;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.optionalusertools.DateChangeListener;
+import com.github.lgooddatepicker.zinternaltools.DateChangeEvent;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.time.LocalDate;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -22,16 +28,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.coincoop.kucointradeexport.controller.ImporterWorker;
 
-public class MiddlePanel extends JPanel {
+class MiddlePanel extends JPanel {
 
     private File path;
+    private LocalDate sinceLocalDate;
+    private LocalDate beforeLocalDate;
     private JLabel emptyLabel;
     private JLabel emptyLabel2;
-    private JLabel emptyLabel3;
     private JLabel apiKeyLabel;
     private JTextField apiKeyTextField;
     private JLabel secretKeyLabel;
-    private JTextField seretKeyTextField;
+    private JTextField secretKeyTextField;
+    private JLabel datePickerBeforeLabel;
+    private DatePicker datePickerBefore;
+    private JLabel datePickerSinceLabel;
+    private DatePicker datePickerSince;
     private JLabel infoLabel;
     private JButton importButton;
     private JButton chooseLocationButton;
@@ -46,12 +57,15 @@ public class MiddlePanel extends JPanel {
     private void initComponents() {
         emptyLabel = new JLabel();
         emptyLabel2 = new JLabel();
-        emptyLabel3 = new JLabel();
         apiKeyLabel = new JLabel();
         apiKeyTextField = new JTextField();
         secretKeyLabel = new JLabel();
-        seretKeyTextField = new JTextField();
+        secretKeyTextField = new JTextField();
         infoLabel = new JLabel();
+        datePickerBeforeLabel = new JLabel();
+        datePickerBefore = new DatePicker();
+        datePickerSinceLabel = new JLabel();
+        datePickerSince = new DatePicker();
         chooseLocationButton = new JButton();
         importButton = new JButton();
         infoScrollPane = new JScrollPane();
@@ -84,13 +98,43 @@ public class MiddlePanel extends JPanel {
         add(secretKeyLabel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 7, 7), 0, 0));
-        add(seretKeyTextField, new GridBagConstraints(4, 2, 8, 1, 0.0, 0.0,
+        add(secretKeyTextField, new GridBagConstraints(4, 2, 8, 1, 0.0, 0.0,
                 GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 7, 0), 0, 0));
 
+        //---- datePickerSinceLabel ----
+        datePickerSinceLabel.setText("Start date:");
+        add(datePickerSinceLabel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 7, 7), 0, 0));
+        add(datePickerSince, new GridBagConstraints(4, 4, 4, 1, 0.0, 0.0,
+                GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 7, 0), 0, 0));
+        datePickerSince.addDateChangeListener(new DateChangeListener() {
+            @Override
+            public void dateChanged(DateChangeEvent dateChangeEvent) {
+                sinceLocalDate = datePickerSince.getDate();
+            }
+        });
+
+        //---- datePickerSinceLabel ----
+        datePickerBeforeLabel.setText("End date:");
+        add(datePickerBeforeLabel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
+                GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 7, 7), 0, 0));
+        add(datePickerBefore, new GridBagConstraints(4, 3, 4, 1, 0.0, 0.0,
+                GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 7, 0), 0, 0));
+        datePickerBefore.addDateChangeListener(new DateChangeListener() {
+            @Override
+            public void dateChanged(DateChangeEvent dateChangeEvent) {
+                beforeLocalDate = datePickerBefore.getDate();
+            }
+        });
+
         //---- infoLabel ----
         infoLabel.setText(" Note: Download of data can take a while, so please wait. Use Ctrl+V / Strg+V to paste.");
-        add(infoLabel, new GridBagConstraints(1, 3, 5, 1, 0.0, 0.0,
+        add(infoLabel, new GridBagConstraints(1, 5, 5, 1, 0.0, 0.0,
                 GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 7, 7), 0, 0));
 
@@ -99,7 +143,7 @@ public class MiddlePanel extends JPanel {
         FileNameExtensionFilter csvFilter = new FileNameExtensionFilter(
                 "csv files (*.csv)", "csv");
         fileChooser.setFileFilter(csvFilter);
-        add(chooseLocationButton, new GridBagConstraints(1, 4, 3, 1, 0.0, 0.0,
+        add(chooseLocationButton, new GridBagConstraints(1, 6, 3, 1, 0.0, 0.0,
                 GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 7, 7), 0, 0));
         chooseLocationButton.addActionListener(new ActionListener() {
@@ -119,28 +163,24 @@ public class MiddlePanel extends JPanel {
 
         //---- importButton ----
         importButton.setText("Download CSV");
-        add(importButton, new GridBagConstraints(7, 4, 5, 1, 0.0, 0.0,
+        add(importButton, new GridBagConstraints(7, 6, 5, 1, 0.0, 0.0,
                 GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 7, 0), 0, 0));
         importButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ImporterWorker importerWorker = new ImporterWorker(apiKeyTextField.getText(), seretKeyTextField.getText(), infoTextArea, path);
+                ImporterWorker importerWorker = new ImporterWorker(apiKeyTextField.getText(), secretKeyTextField.getText(),
+                        infoTextArea, path, beforeLocalDate, sinceLocalDate);
                 importerWorker.execute();
             }
         });
 
-        add(emptyLabel3, new GridBagConstraints(0, 5, 1, 1, 0.0, 0.0,
-                GridBagConstraints.BASELINE, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 7, 7), 0, 0));
-
         //======== infoScrollPane ========
         {
-
             //---- infoTextArea ----
             infoTextArea.setRows(8);
             infoScrollPane.setViewportView(infoTextArea);
         }
-        add(infoScrollPane, new GridBagConstraints(1, 5, 11, 4, 0.0, 0.0,
+        add(infoScrollPane, new GridBagConstraints(1, 7, 11, 4, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
     }
