@@ -7,8 +7,9 @@ Use program on your own risk.
 
 1. Run exe file
 2. Insert your API and Secret Key (if you copy-paste - use Ctrl+V /Strg+V to paste it)
-3. Choose location and name of the file for download
-4. Press Download CSV and wait until all transactions are saved to file
+3. You can constrain download range to certain date range (if empty - it will search for all trades)
+4. Choose location and name of the file for download
+5. Press Download CSV and wait until all transactions are saved to file
 
 ![GUI](docs/gui.png?raw=true "Application GUI")
 
