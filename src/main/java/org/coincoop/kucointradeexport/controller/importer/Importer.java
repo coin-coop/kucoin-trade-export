@@ -16,4 +16,6 @@ public interface Importer {
     List<Record> imports(String apiKey, String secretKey) throws IOException;
 
     List<Record> importChunks(String apiKey, String secretKey, String symbol) throws IOException;
+
+    List<Record> importChunks(String apiKey, String secretKey, String symbol, Long before, Long since) throws IOException;
 }

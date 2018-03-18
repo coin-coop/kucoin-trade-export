@@ -1,6 +1,7 @@
 package org.coincoop.kucointradeexport.controller;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,22 +31,24 @@ public class ImporterWorker extends SwingWorker<Boolean, String> {
     private final String secretKey;
     private final JTextArea messagesTextArea;
     private final File file;
+    private final LocalDate before;
+    private final LocalDate since;
 
     /**
      * Creates an instance of the worker.
      *
-     * @param apiKey
-     *          API key
-     * @param secretKey
-     *          secret key
-     * @param messagesTextArea
-     *          The text area where messages are written
+     * @param apiKey           API key
+     * @param secretKey        secret key
+     * @param messagesTextArea The text area where messages are written
      */
-    public ImporterWorker(final String apiKey, final String secretKey, final JTextArea messagesTextArea, final File file) {
+    public ImporterWorker(final String apiKey, final String secretKey, final JTextArea messagesTextArea,
+                          final File file, final LocalDate before, final LocalDate since) {
         this.apiKey = apiKey;
         this.secretKey = secretKey;
         this.messagesTextArea = messagesTextArea;
         this.file = file;
+        this.before = before;
+        this.since = since;
     }
 
     @Override
@@ -53,14 +56,25 @@ public class ImporterWorker extends SwingWorker<Boolean, String> {
         publish("Importing was started...");
 
         KuCoinClient kuCoinClient = new KuCoinClient(apiKey.trim(), secretKey.trim());
+
         List<String> symbols = kuCoinClient.getTradingSymbols();
         Importer importer = new KuCoinImporterJSON();
 
         List<Record> records = new ArrayList<>();
 
+        Long beforeTimestamp = null;
+        if (Objects.nonNull(before)) {
+            beforeTimestamp = before.toEpochDay();
+        }
+
+        Long sinceTimestamp = null;
+        if (Objects.nonNull(since)) {
+            sinceTimestamp = since.toEpochDay();
+        }
+
         for (String symbol : symbols) {
             publish("Importing trades for symbol " + symbol);
-            List<Record> chunks = importer.importChunks(apiKey.trim(), secretKey.trim(), symbol);
+            List<Record> chunks = importer.importChunks(apiKey.trim(), secretKey.trim(), symbol, beforeTimestamp, sinceTimestamp);
             records.addAll(chunks);
             ImporterWorker.failIfInterrupted();
             publish("Imported trades: " + chunks.size());

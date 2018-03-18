@@ -40,6 +40,11 @@ public class ImporterCSV implements Importer {
         throw new NotImplementedException();
     }
 
+    @Override
+    public List<Record> importChunks(String apiKey, String secretKey, String symbol, Long before, Long since) {
+        throw new NotImplementedException();
+    }
+
     private List<Record> getRecords(CSVParser csvParser, List<String> headers) throws IOException {
         List<Record> results = new ArrayList<>();
         Iterable<CSVRecord> csvRecords = csvParser.getRecords();

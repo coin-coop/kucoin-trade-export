@@ -64,7 +64,22 @@ public class KuCoinClient implements CustomClient {
         return new org.coincoop.kucoinapi.client.KuCoinClient(this.apiKey, this.secretKey).getTradingHistory();
     }
 
+    @Override
+    public List<JsonObject> getTradingHistory(Long before, Long after) throws IOException {
+        return new org.coincoop.kucoinapi.client.KuCoinClient(this.apiKey, this.secretKey).getTradingHistory(before, after);
+    }
+
+    @Override
     public List<JsonObject> getTradingHistory(String symbol) throws IOException {
-        return new org.coincoop.kucoinapi.client.KuCoinClient(this.apiKey, this.secretKey).getTradingHistory(symbol);
+        return new org.coincoop.kucoinapi.client.KuCoinClient(this.apiKey, this.secretKey).getTradingHistory(symbol, null, null);
+    }
+
+    @Override
+    public List<JsonObject> getTradingHistory(String symbol, Long before, Long after) throws IOException {
+        System.out.println("I called it!");
+        System.out.println(symbol);
+        System.out.println(before);
+        System.out.println(after);
+        return new org.coincoop.kucoinapi.client.KuCoinClient(this.apiKey, this.secretKey).getTradingHistory(symbol, before, after);
     }
 }

@@ -1,5 +1,6 @@
 package org.coincoop.kucointradeexport.controller.client;
 
+import java.time.LocalDate;
 import java.util.List;
 import javax.json.JsonObject;
 
@@ -29,5 +30,13 @@ public class KuCoinClientIT {
 
         System.out.println("Third:");
         List<JsonObject> jsonObject = kuCoinClient.getTradingHistory("ETH-BTC");
+    }
+
+    @Test
+    public void shouldGetTradingHistoryWithDates() throws Exception {
+        KuCoinClient kuCoinClient = new KuCoinClient("", "");
+
+        System.out.println("Fourth:");
+        List<JsonObject> jsonObject = kuCoinClient.getTradingHistory(null, LocalDate.of(2018, 3, 14).toEpochDay());
     }
 }
